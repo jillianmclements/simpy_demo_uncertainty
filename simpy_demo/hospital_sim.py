@@ -9,11 +9,10 @@ All durations are in units of days.
 
 import random
 from typing import Dict
+import numpy as np
+import pandas as pd
 
 import simpy
-
-
-random.seed(0)
 
 
 # simulation time step (days)
@@ -25,6 +24,7 @@ class HospitalSim:
         self,
         initial_patients: int,
         initial_beds: int,
+        random_seed: int,
         mean_arrivals_weekday: float = 90,
         mean_arrivals_weekend: float = 120,
         mean_length_of_stay: float = 3,
@@ -41,19 +41,34 @@ class HospitalSim:
         self.max_bed_change = max_bed_change
         self.delay_to_change_beds = delay_to_change_beds
 
-        self.reset(initial_beds=initial_beds, initial_patients=initial_patients)
+        # scenario configuration
+        self.initial_patients = initial_patients
+        self.initial_beds = initial_beds
+        self.random_seed = random_seed
 
-    def reset(self, initial_patients: int, initial_beds: int):
+        self.reset(initial_beds=initial_beds, initial_patients=initial_patients, random_seed=random_seed)
 
+    def reset(
+        self, 
+        initial_patients: int, 
+        initial_beds: int,
+        random_seed: int
+    ):
+        # set seed to control uncertainty
+        random.seed(random_seed)
+
+        # initialize environment
         self.env = simpy.Environment()
 
         # counter for reporting daily simulation state
         self.next_time_step = 0
 
+        # number of beds at beginning of episodes
         self.num_beds = initial_beds
 
         # number of patients currently receiving care
         self.num_patients = initial_patients
+
         # number of patients not admitted because there were no beds available
         self.num_patients_overflow = 0
 
@@ -145,3 +160,48 @@ class HospitalSim:
             "num_patients_overflow": self.num_patients_overflow,
             "utilization": self.num_patients / self.num_beds,
         }
+
+    def get_current_config(self) -> Dict:
+        return {
+            "initial_patients": self.initial_patients,
+            "initial_beds": self.initial_beds,
+            "random_seed": self.random_seed,
+        }
+
+
+if __name__ == "__main__":
+    
+    # DataFrame to store state, action, config
+    data = pd.DataFrame() 
+
+    # choose 10 random seeds for benchmark
+    seeds = np.random.randint(0,100,size=10)
+
+    # choose episode length (in days)
+    episode_length = 2*365
+
+    for seed in seeds:
+        DEFAULT_CONFIG = {"initial_beds": 200, "initial_patients": 0, "random_seed": seed.item()}
+        sim = HospitalSim(**DEFAULT_CONFIG)
+
+        # run sim for an episode and log results for benchmark controller
+        for iter in range(episode_length):
+            # get current state
+            state = sim.get_current_state()
+            config = sim.get_current_config()
+            state.update(config)
+            data = pd.concat([data, pd.DataFrame([state])], ignore_index=True)
+
+            # simple controller (action)
+            if state['utilization'] >= 0.9:
+                Δnum_beds = +25
+            elif state['utilization'] < 0.7:
+                Δnum_beds = -10
+            else:
+                Δnum_beds = 0
+
+            # NOTE: it takes 1 day to change the number of beds
+            sim.step(Δnum_beds=Δnum_beds)
+
+    # save data for comparison to DRL agent ("brain")
+    data.to_csv('benchmark_results.csv', index=False)
