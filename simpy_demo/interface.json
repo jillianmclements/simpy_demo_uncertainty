@@ -1,5 +1,5 @@
 {
-    "name": "Hospital",
+    "name": "Hospital_uncertainty",
     "timeout": 60,
     "description": {
         "config": {
@@ -17,6 +17,13 @@
                     "type": {
                         "category": "Number",
                         "comment": "Initial number of patients."
+                    }
+                },
+                {
+                    "name": "random_seed",
+                    "type": {
+                        "category": "Number",
+                        "comment": "Seed for RNG in Poisson draws."
                     }
                 }
             ]

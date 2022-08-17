@@ -1,4 +1,6 @@
 matplotlib
 microsoft-bonsai-api
+pandas
+numpy
 python-dotenv
 simpy

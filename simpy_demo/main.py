@@ -14,7 +14,7 @@ from microsoft_bonsai_api.simulator.generated.models import (
 import hospital_sim
 
 
-DEFAULT_CONFIG = {"initial_beds": 200, "initial_patients": 0}
+DEFAULT_CONFIG = {"initial_beds": 200, "initial_patients": 0, "random_seed": 0}
 
 
 class TemplateSimulatorSession:

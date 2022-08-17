@@ -26,8 +26,8 @@ The following dependencies are optional but recommended:
 
 1. Clone the project repository to your local machine.
 2. Create a new `.env` file in the root of the project folder, and add your workspace credentials.  See [template.env](./template.env) for an example.
-3. Build a local Docker container with `docker build -t hospital .`
-4. Run the local Docker container with `docker run --env-file .env hospital`
+3. Build a local Docker container with `docker build -t hospital_uncertainty .`
+4. Run the local Docker container with `docker run --env-file .env hospital_uncertainty`
 
 You can now create and train a new brain on the Bonsai platform using the locally running simulator.
 
@@ -66,7 +66,7 @@ Here
 
 - `$RegistryName` is the name of your ACR instance,
 - `$ImageName` is the name and tag of your container image, e.g. `hospital:v1`, and
-- `$SimulatorName` is the name of your simulator in the Bonsai workspace, e.g. `Hospital`.
+- `$SimulatorName` is the name of your simulator in the Bonsai workspace, e.g. `Hospital_uncertainty`.
 
 Note: On PowerShell, replace the backslashes ("\\") with backticks ("`").
 
@@ -78,10 +78,11 @@ Next, upload the [Inkling](https://docs.microsoft.com/en-us/bonsai/inkling/basic
 
 ## Brain Design
 
-There are 2 configuration parameters:
+There are 3 configuration parameters:
 
 - the initial number of patients (0 by default), and
 - the initial number of beds (200 by default).
+- the seed to control random draws from the Poisson distribution (0 by default)
 
 The simulation keeps track of the following states:
 

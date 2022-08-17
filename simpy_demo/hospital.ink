@@ -20,12 +20,13 @@ type SimAction {
 type SimConfig {
     initial_beds: number<200 .. 300>,
     initial_patients: number<0 .. 100>,
+    random_seed: number<0 .. 100>
 }
 
 
 simulator HospitalSim (Action: SimAction, Config: SimConfig): SimState {
     # Automatically launch the simulator with this registered package name.
-    package "Hospital"
+    package "Hospital_uncertainty"
 }
 
 
@@ -52,14 +53,16 @@ graph (input: SimState): SimAction {
             lesson StaticStart {
                 scenario {
                     initial_beds: 200,
-                    initial_patients: 0
+                    initial_patients: 0,
+                    random_seed: 0,
                 }
             }
 
             lesson RandomizeStart {
                 scenario {
                     initial_beds: number<200, 240, 260, 280, 300>,
-                    initial_patients: 0
+                    initial_patients: 0,
+                    random_seed: number<0 .. 100>
                 }
             }
 
