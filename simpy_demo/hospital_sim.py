@@ -11,8 +11,9 @@ import random
 from typing import Dict
 import numpy as np
 import pandas as pd
-
+import json
 import simpy
+from scipy import signal 
 
 
 # simulation time step (days)
@@ -25,6 +26,10 @@ class HospitalSim:
         initial_patients: int,
         initial_beds: int,
         random_seed: int,
+        # simulate a disturbance in the arrival rate (e.g.,)
+        disturbance_amplitude: int = 100,
+        disturbance_length: int = 60,
+        disturbance_start: int = 100,
         mean_arrivals_weekday: float = 90,
         mean_arrivals_weekend: float = 120,
         mean_length_of_stay: float = 3,
@@ -45,14 +50,27 @@ class HospitalSim:
         self.initial_patients = initial_patients
         self.initial_beds = initial_beds
         self.random_seed = random_seed
+        self.disturbance_length = disturbance_length
+        self.disturbance_amplitude = disturbance_amplitude
+        self.disturbance_start = disturbance_start
 
-        self.reset(initial_beds=initial_beds, initial_patients=initial_patients, random_seed=random_seed)
+        self.reset(
+            initial_beds=initial_beds, 
+            initial_patients=initial_patients, 
+            random_seed=random_seed,
+            disturbance_length=disturbance_length,
+            disturbance_amplitude=disturbance_amplitude,
+            disturbance_start=disturbance_start
+            )
 
     def reset(
         self, 
         initial_patients: int, 
         initial_beds: int,
-        random_seed: int
+        random_seed: int,
+        disturbance_length: int,
+        disturbance_amplitude: int,
+        disturbance_start: int,
     ):
         # set seed to control uncertainty
         random.seed(random_seed)
@@ -79,9 +97,42 @@ class HospitalSim:
         # start process for new patient arrivals
         self.env.process(self._patient_arrivals())
 
-    def _adjust_bed_numbers(self, Δnum_beds: int):
+        # create disturbance signal
+        self.mean_arrival_signal = self._create_disturbance_signal(
+            disturbance_length=disturbance_length,
+            disturbance_amplitude=disturbance_amplitude,
+            disturbance_start=disturbance_start,
+        )
 
-        yield self.env.timeout(self.delay_to_change_beds)
+    def _create_disturbance_signal(
+        self,
+        disturbance_length: int,
+        disturbance_amplitude: int,
+        disturbance_start: int,
+        ):
+        # create a signal with a length of `disturbance_length` days
+        # and an amplitude of `disturbance_amplitude` mean patients per day
+
+        # normal week signal
+        weekly_signal = np.ones(365) * self.mean_arrivals_weekday
+        weekly_signal[::6] = self.mean_arrivals_weekend
+        weekly_signal[::7] = self.mean_arrivals_weekend
+
+        # add disturbance to the signal
+        disturbance_signal = disturbance_amplitude*signal.gaussian(disturbance_length, std=1)
+        pad_before = disturbance_start
+        pad_after = 365 - (disturbance_length + disturbance_start)
+        disturbance_signal = np.pad(disturbance_signal, (pad_before, pad_after))
+        
+        # combine the signals
+        mean_arrival_signal = weekly_signal + disturbance_signal
+
+        return mean_arrival_signal
+
+    def _adjust_bed_numbers(self, Δnum_beds: int):
+        # adjust the number of beds by Δnum_beds
+
+        yield self.env.timeout(self.delay_to_change_beds) # wait for delay
 
         self.num_beds += Δnum_beds
 
@@ -113,19 +164,21 @@ class HospitalSim:
             # no beds are available
             self.num_patients_overflow += 1
 
-    def _get_day_of_week(self) -> int:
-        return int((self.env.now) % 7)
+    # def _get_day_of_week(self) -> int:
+    #     return int((self.env.now) % 7)
 
-    def _is_weekend(self) -> bool:
-        return self._get_day_of_week() >= 5
+    # def _is_weekend(self) -> bool:
+    #     return self._get_day_of_week() >= 5
 
     def _get_time_to_next_arrival(self) -> float:
         # time until next patient admission
 
-        if self._is_weekend():
-            mean_arrivals_per_day = self.mean_arrivals_weekend
-        else:
-            mean_arrivals_per_day = self.mean_arrivals_weekday
+        # if self._is_weekend():
+        #     mean_arrivals_per_day = self.mean_arrivals_weekend
+        # else:
+        #     mean_arrivals_per_day = self.mean_arrivals_weekday
+
+        mean_arrivals_per_day = self.mean_arrival_signal[int(self.env.now)]
 
         inter_arrival_time = 1 / mean_arrivals_per_day
         return random.expovariate(1 / inter_arrival_time)
@@ -166,6 +219,9 @@ class HospitalSim:
             "initial_patients": self.initial_patients,
             "initial_beds": self.initial_beds,
             "random_seed": self.random_seed,
+            "disturbance_length": self.disturbance_length,
+            "disturbance_amplitude": self.disturbance_amplitude,
+            "disturbance_start": self.disturbance_start,
         }
 
 
@@ -174,23 +230,21 @@ if __name__ == "__main__":
     # DataFrame to store state, action, config
     data = pd.DataFrame() 
 
-    # choose 10 random seeds for benchmark
-    seeds = np.random.randint(0,100,size=10)
+    # number of episodes for benchmark test set
+    configs = json.load(open('simpy_demo/assessment_40episodes.json'))
+    configs = configs["episodeConfigurations"]
 
     # choose episode length (in days)
-    episode_length = 2*365
+    episode_length = 365
 
-    for seed in seeds:
-        DEFAULT_CONFIG = {"initial_beds": 200, "initial_patients": 0, "random_seed": seed.item()}
-        sim = HospitalSim(**DEFAULT_CONFIG)
+    for config in configs:
+        # initialize sim
+        sim = HospitalSim(**config)
 
         # run sim for an episode and log results for benchmark controller
         for iter in range(episode_length):
             # get current state
             state = sim.get_current_state()
-            config = sim.get_current_config()
-            state.update(config)
-            data = pd.concat([data, pd.DataFrame([state])], ignore_index=True)
 
             # simple controller (action)
             if state['utilization'] >= 0.9:
@@ -202,6 +256,12 @@ if __name__ == "__main__":
 
             # NOTE: it takes 1 day to change the number of beds
             sim.step(Δnum_beds=Δnum_beds)
+
+            # Log results
+            config = sim.get_current_config()
+            state.update(config)
+            state.update({'change_beds': Δnum_beds})
+            data = pd.concat([data, pd.DataFrame([state])], ignore_index=True)
 
     # save data for comparison to DRL agent ("brain")
     data.to_csv('benchmark_results.csv', index=False)

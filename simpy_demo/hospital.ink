@@ -20,7 +20,10 @@ type SimAction {
 type SimConfig {
     initial_beds: number<200 .. 300>,
     initial_patients: number<0 .. 100>,
-    random_seed: number<0 .. 100>
+    random_seed: number<0 .. 100>,
+    disturbance_amplitude: number<10 .. 200>, # add Gaussian to mean patient arrival
+    disturbance_length: number<30 .. 120>, # Gaussian width, in days (1 - 4 months)
+    disturbance_start: number<10 .. 200>, # day of year to start disturbance
 }
 
 
@@ -38,7 +41,7 @@ graph (input: SimState): SimAction {
             source HospitalSim
 
             training {
-                EpisodeIterationLimit: 2 * 365, # default is 1,000
+                EpisodeIterationLimit: 365, # in days, default is 1,000
             }
 
             goal (State: SimState) {
@@ -50,19 +53,14 @@ graph (input: SimState): SimAction {
 
             }
 
-            lesson StaticStart {
-                scenario {
-                    initial_beds: 200,
-                    initial_patients: 0,
-                    random_seed: 0,
-                }
-            }
-
             lesson RandomizeStart {
                 scenario {
-                    initial_beds: number<200, 240, 260, 280, 300>,
-                    initial_patients: 0,
-                    random_seed: number<0 .. 100>
+                    initial_beds: number<200 .. 300>,
+                    initial_patients: number<0 .. 100>,
+                    random_seed: number<0 .. 100>,
+                    disturbance_amplitude: number<10 .. 200>, # add Gaussian to mean patient arrival
+                    disturbance_length: number<30 .. 120>, # Gaussian width, in days (1 - 4 months)
+                    disturbance_start: number<10 .. 200>, # day of year to start disturbance
                 }
             }
 

@@ -14,7 +14,14 @@ from microsoft_bonsai_api.simulator.generated.models import (
 import hospital_sim
 
 
-DEFAULT_CONFIG = {"initial_beds": 200, "initial_patients": 0, "random_seed": 0}
+DEFAULT_CONFIG = {
+    "initial_beds": 200, 
+    "initial_patients": 0, 
+    "random_seed": 0,
+    "disturbance_amplitude": 100,
+    "disturbance_length": 60,
+    "disturbance_start": 100,
+    }
 
 
 class TemplateSimulatorSession:
@@ -66,8 +73,13 @@ def get_sim_interface(simulator_context) -> SimulatorInterface:
 
 
 def get_session_id(client_config, client) -> str:
-    registration_info = get_sim_interface(
-        simulator_context=client_config.simulator_context
+    #registration_info = get_sim_interface(
+    #    asimulator_context=client_config.simulator_context
+    #)
+    registration_info = SimulatorInterface(
+        name="Hospital_uncertainty",
+        timeout=60,
+        simulator_context=client_config.simulator_context,
     )
 
     registered_session: SimulatorSessionResponse = client.session.create(

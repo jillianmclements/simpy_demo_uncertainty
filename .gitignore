@@ -2,3 +2,4 @@
 *.env
 *.csv
 !template.env
+*.DS_Store

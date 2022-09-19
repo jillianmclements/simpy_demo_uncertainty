@@ -1,0 +1,326 @@
+{
+  "version": "1.0.0",
+  "context": {},
+  "episodeConfigurations": [
+    {
+      "initial_beds": 262,
+      "initial_patients": 86,
+      "random_seed": 18,
+      "disturbance_amplitude": 175,
+      "disturbance_length": 88,
+      "disturbance_start": 30
+    },
+    {
+      "initial_beds": 293,
+      "initial_patients": 2,
+      "random_seed": 34,
+      "disturbance_amplitude": 174,
+      "disturbance_length": 119,
+      "disturbance_start": 156
+    },
+    {
+      "initial_beds": 289,
+      "initial_patients": 62,
+      "random_seed": 63,
+      "disturbance_amplitude": 165,
+      "disturbance_length": 58,
+      "disturbance_start": 10
+    },
+    {
+      "initial_beds": 297,
+      "initial_patients": 15,
+      "random_seed": 38,
+      "disturbance_amplitude": 143,
+      "disturbance_length": 101,
+      "disturbance_start": 141
+    },
+    {
+      "initial_beds": 235,
+      "initial_patients": 47,
+      "random_seed": 66,
+      "disturbance_amplitude": 124,
+      "disturbance_length": 115,
+      "disturbance_start": 164
+    },
+    {
+      "initial_beds": 209,
+      "initial_patients": 49,
+      "random_seed": 27,
+      "disturbance_amplitude": 174,
+      "disturbance_length": 75,
+      "disturbance_start": 64
+    },
+    {
+      "initial_beds": 244,
+      "initial_patients": 51,
+      "random_seed": 22,
+      "disturbance_amplitude": 158,
+      "disturbance_length": 93,
+      "disturbance_start": 80
+    },
+    {
+      "initial_beds": 295,
+      "initial_patients": 100,
+      "random_seed": 90,
+      "disturbance_amplitude": 131,
+      "disturbance_length": 60,
+      "disturbance_start": 125
+    },
+    {
+      "initial_beds": 243,
+      "initial_patients": 78,
+      "random_seed": 17,
+      "disturbance_amplitude": 169,
+      "disturbance_length": 110,
+      "disturbance_start": 65
+    },
+    {
+      "initial_beds": 297,
+      "initial_patients": 50,
+      "random_seed": 40,
+      "disturbance_amplitude": 126,
+      "disturbance_length": 120,
+      "disturbance_start": 132
+    },
+    {
+      "initial_beds": 251,
+      "initial_patients": 100,
+      "random_seed": 72,
+      "disturbance_amplitude": 188,
+      "disturbance_length": 82,
+      "disturbance_start": 57
+    },
+    {
+      "initial_beds": 257,
+      "initial_patients": 68,
+      "random_seed": 63,
+      "disturbance_amplitude": 174,
+      "disturbance_length": 100,
+      "disturbance_start": 179
+    },
+    {
+      "initial_beds": 263,
+      "initial_patients": 42,
+      "random_seed": 40,
+      "disturbance_amplitude": 174,
+      "disturbance_length": 93,
+      "disturbance_start": 148
+    },
+    {
+      "initial_beds": 226,
+      "initial_patients": 90,
+      "random_seed": 32,
+      "disturbance_amplitude": 189,
+      "disturbance_length": 99,
+      "disturbance_start": 162
+    },
+    {
+      "initial_beds": 264,
+      "initial_patients": 71,
+      "random_seed": 80,
+      "disturbance_amplitude": 109,
+      "disturbance_length": 39,
+      "disturbance_start": 155
+    },
+    {
+      "initial_beds": 220,
+      "initial_patients": 90,
+      "random_seed": 79,
+      "disturbance_amplitude": 151,
+      "disturbance_length": 64,
+      "disturbance_start": 85
+    },
+    {
+      "initial_beds": 293,
+      "initial_patients": 53,
+      "random_seed": 76,
+      "disturbance_amplitude": 176,
+      "disturbance_length": 69,
+      "disturbance_start": 51
+    },
+    {
+      "initial_beds": 228,
+      "initial_patients": 2,
+      "random_seed": 96,
+      "disturbance_amplitude": 183,
+      "disturbance_length": 39,
+      "disturbance_start": 151
+    },
+    {
+      "initial_beds": 221,
+      "initial_patients": 81,
+      "random_seed": 40,
+      "disturbance_amplitude": 173,
+      "disturbance_length": 46,
+      "disturbance_start": 107
+    },
+    {
+      "initial_beds": 286,
+      "initial_patients": 74,
+      "random_seed": 18,
+      "disturbance_amplitude": 181,
+      "disturbance_length": 102,
+      "disturbance_start": 178
+    },
+    {
+      "initial_beds": 206,
+      "initial_patients": 4,
+      "random_seed": 76,
+      "disturbance_amplitude": 104,
+      "disturbance_length": 34,
+      "disturbance_start": 169
+    },
+    {
+      "initial_beds": 248,
+      "initial_patients": 66,
+      "random_seed": 11,
+      "disturbance_amplitude": 196,
+      "disturbance_length": 98,
+      "disturbance_start": 121
+    },
+    {
+      "initial_beds": 215,
+      "initial_patients": 86,
+      "random_seed": 68,
+      "disturbance_amplitude": 128,
+      "disturbance_length": 87,
+      "disturbance_start": 94
+    },
+    {
+      "initial_beds": 208,
+      "initial_patients": 11,
+      "random_seed": 28,
+      "disturbance_amplitude": 180,
+      "disturbance_length": 41,
+      "disturbance_start": 144
+    },
+    {
+      "initial_beds": 278,
+      "initial_patients": 40,
+      "random_seed": 60,
+      "disturbance_amplitude": 127,
+      "disturbance_length": 64,
+      "disturbance_start": 171
+    },
+    {
+      "initial_beds": 202,
+      "initial_patients": 95,
+      "random_seed": 28,
+      "disturbance_amplitude": 113,
+      "disturbance_length": 112,
+      "disturbance_start": 73
+    },
+    {
+      "initial_beds": 291,
+      "initial_patients": 90,
+      "random_seed": 81,
+      "disturbance_amplitude": 133,
+      "disturbance_length": 42,
+      "disturbance_start": 97
+    },
+    {
+      "initial_beds": 233,
+      "initial_patients": 96,
+      "random_seed": 25,
+      "disturbance_amplitude": 105,
+      "disturbance_length": 52,
+      "disturbance_start": 103
+    },
+    {
+      "initial_beds": 219,
+      "initial_patients": 8,
+      "random_seed": 9,
+      "disturbance_amplitude": 131,
+      "disturbance_length": 70,
+      "disturbance_start": 172
+    },
+    {
+      "initial_beds": 291,
+      "initial_patients": 30,
+      "random_seed": 48,
+      "disturbance_amplitude": 107,
+      "disturbance_length": 54,
+      "disturbance_start": 32
+    },
+    {
+      "initial_beds": 256,
+      "initial_patients": 54,
+      "random_seed": 92,
+      "disturbance_amplitude": 187,
+      "disturbance_length": 109,
+      "disturbance_start": 127
+    },
+    {
+      "initial_beds": 264,
+      "initial_patients": 67,
+      "random_seed": 10,
+      "disturbance_amplitude": 175,
+      "disturbance_length": 108,
+      "disturbance_start": 190
+    },
+    {
+      "initial_beds": 295,
+      "initial_patients": 27,
+      "random_seed": 10,
+      "disturbance_amplitude": 139,
+      "disturbance_length": 78,
+      "disturbance_start": 175
+    },
+    {
+      "initial_beds": 285,
+      "initial_patients": 93,
+      "random_seed": 13,
+      "disturbance_amplitude": 175,
+      "disturbance_length": 60,
+      "disturbance_start": 196
+    },
+    {
+      "initial_beds": 225,
+      "initial_patients": 95,
+      "random_seed": 99,
+      "disturbance_amplitude": 138,
+      "disturbance_length": 69,
+      "disturbance_start": 196
+    },
+    {
+      "initial_beds": 233,
+      "initial_patients": 73,
+      "random_seed": 48,
+      "disturbance_amplitude": 145,
+      "disturbance_length": 65,
+      "disturbance_start": 127
+    },
+    {
+      "initial_beds": 230,
+      "initial_patients": 69,
+      "random_seed": 56,
+      "disturbance_amplitude": 185,
+      "disturbance_length": 68,
+      "disturbance_start": 60
+    },
+    {
+      "initial_beds": 289,
+      "initial_patients": 82,
+      "random_seed": 14,
+      "disturbance_amplitude": 151,
+      "disturbance_length": 95,
+      "disturbance_start": 57
+    },
+    {
+      "initial_beds": 285,
+      "initial_patients": 30,
+      "random_seed": 61,
+      "disturbance_amplitude": 188,
+      "disturbance_length": 34,
+      "disturbance_start": 72
+    },
+    {
+      "initial_beds": 211,
+      "initial_patients": 48,
+      "random_seed": 71,
+      "disturbance_amplitude": 127,
+      "disturbance_length": 70,
+      "disturbance_start": 176
+    }
+  ]
+}

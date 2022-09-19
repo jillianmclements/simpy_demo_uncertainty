@@ -4,6 +4,11 @@ This project demonstrates how to integrate [SimPy](https://simpy.readthedocs.io/
 
 In this demo, we train a deep reinforcement learning system to optimize utilization of hospital beds with random patient arrivals.
 
+**Jill's Fork Additions:**
+
+- Added uncertainty to inter-arrival times via random seed configuration.
+- Added a random Gaussian "disturbance" to number of patients
+
 ## Quickstart / Setup Guide
 
 ### Installation Requirements
@@ -66,7 +71,7 @@ Here
 
 - `$RegistryName` is the name of your ACR instance,
 - `$ImageName` is the name and tag of your container image, e.g. `hospital:v1`, and
-- `$SimulatorName` is the name of your simulator in the Bonsai workspace, e.g. `Hospital_uncertainty`.
+- `$SimulatorName` is the name of your simulator in the Bonsai workspace, e.g. `hospital_uncertainty`.
 
 Note: On PowerShell, replace the backslashes ("\\") with backticks ("`").
 
@@ -78,21 +83,21 @@ Next, upload the [Inkling](https://docs.microsoft.com/en-us/bonsai/inkling/basic
 
 ## Brain Design
 
-There are 3 configuration parameters:
+There are 3 **configuration** parameters:
 
-- the initial number of patients (0 by default), and
-- the initial number of beds (200 by default).
-- the seed to control random draws from the Poisson distribution (0 by default)
+- `initial_beds`: the initial number of beds (varies between 200 and 300),
+- `initial_patients`: the initial number of patients (varies between 0 and 100), and
+- `random_seed`: the seed to control random draws from the Poisson distribution (varies between 0 and 100).
 
-The simulation keeps track of the following states:
+The simulation keeps track of the following **states**:
 
-- the simulation time (useful for plots and debugging),
-- the number of beds in a given day,
-- the number of patients in a given day,
-- the number of patients turned away because no beds were available, and
-- the utilization (the ratio of patients to beds).
+- `simulation_time`: the simulation time (useful for plots and debugging),
+- `num_beds`: the number of beds in a given day,
+- `num_patients`: the number of patients in a given day,
+- `num_patients_overflow`: the number of patients turned away because no beds were available, and
+- `utilization`: the utilization (the ratio of patients to beds).
 
-The only possible action the brain can take is to change the number of beds.
+The only possible **action** the brain can take is to change the number of beds. It has 3 options: add 25 beds, add 0 beds, subtract 10 beds.
 
 ### Utilization and Queue Theory
 
@@ -106,11 +111,9 @@ Government regulations and hospital policies have historically set utilization t
 
 For our purposes, it is sufficient to choose a (somewhat arbitrary) target utilization and instruct the brain to keep the utilization within that range.
 
-The first lesson (*StaticStart*) sets the initial number of beds at 200, and the brain learns to keep the utilization between 0.7 and 0.9.  The `within 14` clause requires the brain to reach the target utilization within 14 days for the training episode to be considered successful.
+Bonsai selects the initial random seeed along with the initial number of beds and patients, and the brain learns to keep the utilization between 0.7 and 0.9.  The `within 14` clause requires the brain to reach the target utilization within 14 days for the training episode to be considered successful.
 
-The second lesson (*RandomizeStart*) generalizes to between 200 and 300 beds in increments of 20.
-
-Training episodes run for 2 years.
+Training and assessment episodes run for 2 years.
 
 ## Simulation Details
 
